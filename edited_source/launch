@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# check: jdk1.8 is available in current directory
+if [ ! -d ./jre1.8.0_202 ]; then
+        echo "./jre1.8.0_202 directory not found"
+        echo "Download jre-8u202-linux-x64.tar.gz from https://www.oracle.com/nl/java/technologies/javase/javase8-archive-downloads.html"
+        exit -1
+fi
+
+./jre1.8.0_202/bin/java -Djava.library.path="./lib" -cp './plugins/*' com.owon.vds.smart.Main

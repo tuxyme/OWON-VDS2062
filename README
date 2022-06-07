@@ -1,0 +1,35 @@
+OWON VDS2064 Oscilloscope for linux
+===================================
+
+This project allows the OWON VDS2062 software to run on Linux. The VDS2062 is also
+sold as Multicomp Pro MP720018 and probably under other brand names. This software
+is tested on several releases of Debian and Ubuntu using a MP720018.
+
+Installation instructions:
+1) download Owon VDS2062 software
+   https://www.owon.com.hk/download.asp?category=Digital%20Oscilloscope&series=VDS%20Series&model=VDS2062
+2) unpack and run the windows installer (on Windows or using wine)
+3) copy the resulting VDS_S2 directory to the project (this) directory
+4) modify the VDS_S2 tree:
+   > cd VDS_S2
+   > rm launcher.exe, uninst.exe
+   > rm -rf USBDRV
+   > mkdir lib
+   > cd plugins
+   > mv */*.jar .
+   - Download jre-8u202-linux-x64.tar.gz from
+     https://www.oracle.com/nl/java/technologies/javase/javase8-archive-downloads.html
+   - unpack and move jre1.8.0_202 to the VDS_S2 directory
+5) compile and install libusbJava, see libusb/README
+6) The Java class files are generated using jdk6. Install jdk6 in the project directory.
+   - Download jdk-6u45-linux-x64.bin from
+     https://www.oracle.com/nl/java/technologies/javase-java-archive-javase6-downloads.html
+   - move jdk1.6.0_45 to the project directory
+7) run decompile.sh
+8) run compile.sh
+9) start the application:
+   > cd VDS_S2
+   > ./launch
+
+The decompile and compile scripts are commented in hope to provide some guidance
+when a script fails.

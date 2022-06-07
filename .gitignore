@@ -1,0 +1,11 @@
+*.jar
+build/
+source/
+*.jar
+*.tar.gz
+amd64/
+arm64/
+armhf/
+i386/
+jdk1.6.0_45
+VDS_S2/

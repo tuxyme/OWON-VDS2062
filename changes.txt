@@ -1,0 +1,7 @@
+2022-06-06 initial release
+* using Java1.8 on Linux
+* Removed AWTUtility opacity < 1f calls (not supported on Linux)
+* Changed CH1 from red to green (color is hardcoded / didn't like red)
+* Removed Windows arch specific string parsing that crashed on Linux
+* Case sensitive file system support (saving waveforms)
+* LCPI: added '#' prefix to 4-byte (length) header of binary transfers

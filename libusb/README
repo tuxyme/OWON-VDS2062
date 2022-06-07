@@ -1,0 +1,36 @@
+Sources
+=======
+Software in this tree is taken from
+  https://github.com/florentbr/OWON-VDS1022/raw/master/lib/libusbJava-src.zip
+
+Project https://github.com/florentbr/OWON-VDS1022 is an unofficial release for
+the VDS1022 oscilloscope. The download from this site includes libusb-0.1 library
+binaries for different architectures. The binaries are not included here and the
+proper binary for the target system must be downloaded or installed seperately.
+
+See linux/sources.md for complete reference to used sources.
+
+Dependencies
+============
+The libusb-0.1.so.4 library is referenced during compilation. Edit the build script
+for your architecture to link to the proper location. To run the software, the
+library must be present on the system library path or in the VDS_S2/lib directory.
+
+  install libusb-0.1 on Debian:
+    apt-get install libusb-0.1-4
+  or download and unpack from
+    https://packages.debian.org/bullseye/libusb-0.1-4
+
+Compile and install
+===================
+> cd linux
+> ./build-amd64.sh
+> cp amd64/libusbJava.so ../../VDS_S2/lib/
+
+Modification for VDS2062
+========================
+The VDS2062 client software sends an usb set-configuration message on every new
+connection. The libusb stack on Linux relays this message to the device. After
+that message the device becomes unresponsive. On Windows these configuration
+messages are not present. The device worked properly after changing LibusbJava.c
+to block multiple configuration messages.
