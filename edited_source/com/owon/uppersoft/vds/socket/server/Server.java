@@ -138,8 +138,7 @@ public class Server
         System.out.println("TRANS: " + trans);
         if ((trans != null) && (!trans.equalsIgnoreCase("")))
         {
-          SelectionKey sKey = client.register(selector,
-            4);
+          SelectionKey sKey = client.register(selector, 4);
           sKey.attach(trans);
         }
       }
@@ -170,6 +169,7 @@ public class Server
       }
       else
       {
+        cmd += "\n";
         ByteBuffer block = ByteBuffer.wrap(cmd.getBytes());
         if (dbgView != null) {
           dbgView.addWriteText(cmd);
@@ -185,6 +185,7 @@ public class Server
     String[] splits = cmd.split(";");
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < splits.length; i++) {
+      if (i > 0) sb.append(";");
       sb.append(analyse(splits[i]));
     }
     return sb.toString();

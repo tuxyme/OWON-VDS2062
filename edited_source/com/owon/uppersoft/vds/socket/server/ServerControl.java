@@ -109,6 +109,7 @@ public class ServerControl
       ByteBuffer head = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);
       head.putInt(dataLen).flip();
       channel.write(head);
+      channel.write(ByteBuffer.wrap("\n".getBytes()));
       while (p < dataLen)
       {
         if (bl > dataLen - p) {
@@ -116,15 +117,13 @@ public class ServerControl
         }
         wn = channel.write(ByteBuffer.wrap(buf, p, bl));
         p += wn;
-        println("p:" + p, false);
       }
     }
     else
     {
       ByteBuffer head = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);
-      head.putInt(-1).flip();
+      head.putInt(0).flip();
       channel.write(head);
-      channel.write(ByteBuffer.wrap("FIALED".getBytes()));
     }
   }
 
@@ -164,7 +163,7 @@ public class ServerControl
     }
     else
     {
-      rsp = "TRANSMITSSION FAILED AS OFFLINE";
+      rsp = "TRANSMITSSION FAILED AS OFFLINE\n";
       block = ByteBuffer.wrap(rsp.getBytes());
     }
     channel.write(block);
@@ -181,38 +180,30 @@ public class ServerControl
 
     File dmf = AbsInterCommunicator.dmf;
     boolean noUse = dmf.renameTo(dmf);
-    println("step4.retrun.noUse:" + noUse + ",dmf.exists():" + dmf.exists(),
-      false);
     if (dmf.exists())
     {
       boolean b = FileUtil.copyFile2(dmf, dest);
-      String success = "TRANSMITSSION  DONE  SAVED @ " +
-        dest.getAbsolutePath();
-      String failure = "TRANSMITSSION FAILED  FileNotFound  " +
-        dest.getAbsolutePath();
+      String success = "SUCCESS: " + dest.getAbsolutePath() + "\n";
+      String failure = "FAILED: " + dest.getAbsolutePath() + "\n";
       return b ? success : failure;
     }
-    return "TRANSMITSSION FAILED  DEEPMEMORY DATA NULL";
+    return "FAILED: DEEPMEMORY DATA NULL\n";
   }
 
   private String remote_dm_transmit(SocketChannel channel)
   {
     File dm = AbsInterCommunicator.dmf;
     boolean noUse = dm.renameTo(dm);
-    println("step4.retrun.noUse:" + noUse, false);
 
     File temp = AbsInterCommunicator.tmp_dmf;
     temp.delete();
     boolean b = FileUtil.copyFile2(dm, temp);
-    println("dm:" + dm.length() + "temp:" + temp.length(), false);
     if (!b) {
-      return "TRANSMITSSION FAILED";
+      return "TRANSMITSSION FAILED\n";
     }
     if (temp.exists())
     {
         int dataLen = (int)temp.length();
-        System.out.println("data len:" + dataLen);
-        System.out.println("dm len:" + dm.length());
         ByteBuffer buf = ByteBuffer.allocate(dataLen).order(ByteOrder.BIG_ENDIAN);
         CByteArrayInputStream ba = new CByteArrayInputStream(temp);
         ba.get(buf.array(), 0, dataLen);
@@ -220,28 +211,24 @@ public class ServerControl
         try
         {
             channel.write(ByteBuffer.wrap("#".getBytes()));
-            int p = 0;int wn = 0;
             ByteBuffer head = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);
             head.putInt(dataLen).flip();
             channel.write(head);
+            channel.write(ByteBuffer.wrap("\n".getBytes()));
             while (buf.hasRemaining())
             {
-                wn = channel.write(buf);
-                p += wn;
-                println("p:" + p + "wn:" + wn, false);
+                channel.write(buf);
             }
             return "";
         }
         catch (IOException e)
         {
             e.printStackTrace();
-            return "TRANSMITSSION FAILED";
+            return "TRANSMITSSION FAILED\n";
         }
     }
-    return "TRANSMITSSION FAILED";
+    return "TRANSMITSSION FAILED\n";
   }
-
-  private void println(String txt, boolean onOut) {}
 
   private String test(SocketChannel channel)
   {
@@ -260,8 +247,7 @@ public class ServerControl
         buf.put(mytext.getBytes());
       }
       buf.flip();
-      int wn = channel.write(buf);
-      println("wn:" + wn, false);
+      channel.write(buf);
 
       return "TRANSMITSSION  DONE";
     }

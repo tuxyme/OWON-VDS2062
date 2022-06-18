@@ -33,3 +33,14 @@ Installation instructions:
 
 The decompile and compile scripts are commented in hope to provide some guidance
 when a script fails.
+
+SCPI
+====
+
+The scpi folder contains the SCPILink module for communicating with the VDS2064 via SCPI. Make sure
+the SCPI server is started (function menu > Utility > SCPI Console) and match the port the SCPI
+server is listening on with the port in scpitest.py. Then run scpitest:
+> python3 scpitest.py
+
+When using the SCPILink module in an environment with existing event loop (eg Spyder), use nest_asyncio
+as shown in spyder.py
